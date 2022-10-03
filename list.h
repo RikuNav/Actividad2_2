@@ -1,8 +1,8 @@
 // =================================================================
 //
 // File: list.h
-// Author:
-// Date:
+// Author: Ricardo Navarro Gómez - A01708825
+// Date: 29/09/2022
 //
 // =================================================================
 #ifndef DOUBLELINKEDLIST_H
@@ -219,22 +219,62 @@ T DoubleLinkedList<T>::last() const {
 // Returns the value before the first occurrence if certain value.
 //
 // @throws NoSuchelement, if val is not on the list.
+//
+// Complexity: O(n)
+// At the moment we do the analysis of the complexity of the
+// algotirhm, we can see that the worst scenario has on it only
+// a for loop, in which we know that his complexity is the one that
+// we already mentioned
 // =================================================================
 template <class T>
 T DoubleLinkedList<T>::before(T val) const {
 	
-	return val;
+	Node<T> *p, *q;
+	p = head;
+
+	for (int i = 0; i < size; i++){
+		if (val == p->value && i == 0){
+			throw NoSuchElement();
+		}
+		else if (val == p->value){
+			q = p->previous;
+			val = q->value;
+			return val;
+		}
+		p = p->next;
+	}
+	throw NoSuchElement();
 }
 
 // =================================================================
 // Returns the value after the first occurrence of certain value.
 //
 // @throws NoSuchelement, if val is not on the list.
+//
+// Complexity: O(n)
+// At the moment we do the analysis of the complexity of the
+// algotirhm, we can see that the worst scenario has on it only
+// a for loop, in which we know that his complexity is the one that
+// we already mentioned
 // =================================================================
 template <class T>
 T DoubleLinkedList<T>::after(T val) const {
 	
-	return val;
+	Node<T> *p, *q;
+	p = head;
+
+	for (int i = 0; i < size; i++){
+		if (val == p->value && i == size - 1){
+			throw NoSuchElement();
+		}
+		else if (val == p->value){
+			q = p->next;
+			val = q->value;
+			return val;
+		}
+		p = p->next;
+	}
+	throw NoSuchElement();
 }
 
 // =================================================================
@@ -291,9 +331,39 @@ void DoubleLinkedList<T>::push_back(T val) {
 // Insert an element before the first occurrence of a certain value.
 //
 // @throws NoSuchelement, if lookingFor is not on the list.
+//
+// Complexity: O(n)
+// At the moment we do the analysis of the complexity of the
+// algotirhm, we can see that the worst scenario has on it only
+// a for loop, in which we know that his complexity is the one that
+// we already mentioned
 // =================================================================
 template <class T>
 void DoubleLinkedList<T>::insert_before(T lookingFor, T newVal) {
+	Node<T> *p, *q, *r;
+	p = head;
+
+	int h = 0;
+
+	if (p->value == lookingFor){
+		push_front(newVal);
+		return;
+	}
+	while (p->value != lookingFor){
+		p = p->next;
+		h++;
+		if (h >= size){
+			throw NoSuchElement();
+		}
+	}
+	q = p->previous;
+	r = new Node<T>(newVal);
+	q->next = r;
+	p->previous = r;
+	r->next = p;
+	r->previous = q;
+	size++;
+	
 	// TO DO
 }
 
@@ -301,9 +371,38 @@ void DoubleLinkedList<T>::insert_before(T lookingFor, T newVal) {
 // Insert an element after the first occurrence of a certain value.
 //
 // @throws NoSuchelement, if lookingFor is not on the list.
+//
+// Complexity: O(n)
+// At the moment we do the analysis of the complexity of the
+// algotirhm, we can see that the worst scenario has on it only
+// a for loop, in which we know that his complexity is the one that
+// we already mentioned
 // =================================================================
 template <class T>
 void DoubleLinkedList<T>::insert_after(T lookingFor, T newVal) {
+	Node<T> *p, *q, *r;
+	p = head;
+
+	int h = 0;
+
+	while (p->value != lookingFor){
+		p = p->next;
+		h++;
+		if (h >= size){
+			throw NoSuchElement();
+		}
+	}
+	if (p->next == NULL){
+		push_back(newVal);
+		return;
+	}
+	q = p->next;
+	r = new Node<T>(newVal);
+	q->previous = r;
+	p->next = r;
+	r->next = q;
+	r->previous = p;
+	size++;
 	// TO DO
 }
 
